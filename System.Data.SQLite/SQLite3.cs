@@ -2201,7 +2201,12 @@ namespace System.Data.SQLite
 #endif
     }
 
-    internal override long GetBytes(SQLiteStatement stmt, int index, int nDataOffset, byte[] bDest, int nStart, int nLength)
+    internal TimeSpan GetTime(SQLiteStatement stmt, int index)
+    {
+        return TicksToTimeSpan(GetInt64(stmt, index));
+    }
+
+        internal override long GetBytes(SQLiteStatement stmt, int index, int nDataOffset, byte[] bDest, int nStart, int nLength)
     {
       int nlen = UnsafeNativeMethods.sqlite3_column_bytes(stmt._sqlite_stmt, index);
 
@@ -3303,6 +3308,7 @@ namespace System.Data.SQLite
           if (t == typeof(UInt32)) return GetUInt32(stmt, index);
           if (t == typeof(Int64)) return GetInt64(stmt, index);
           if (t == typeof(UInt64)) return GetUInt64(stmt, index);
+          if (t == typeof(TimeSpan)) return GetTime(stmt, index);
           return Convert.ChangeType(GetInt64(stmt, index), t, null);
         default:
           return GetText(stmt, index);

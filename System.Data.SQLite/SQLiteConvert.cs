@@ -733,6 +733,11 @@ namespace System.Data.SQLite
         return new DateTime(ticks, kind);
     }
 
+    internal static TimeSpan TicksToTimeSpan(long ticks)
+    {
+        return TimeSpan.FromTicks(ticks);
+    }
+
     /// <summary>
     /// Converts a DateTime struct to a JulianDay double
     /// </summary>
@@ -1610,7 +1615,7 @@ namespace System.Data.SQLite
       typeof(sbyte),    // SByte (14)
       typeof(float),    // Single (15)
       typeof(string),   // String (16)
-      typeof(DateTime), // Time (17)
+      typeof(TimeSpan), // Time (17)
       typeof(UInt16),   // UInt16 (18)
       typeof(UInt32),   // UInt32 (19)
       typeof(UInt64),   // UInt64 (20)
@@ -1636,9 +1641,11 @@ namespace System.Data.SQLite
       if (tc == TypeCode.Object)
       {
         if (typ == typeof(byte[]) || typ == typeof(Guid))
-          return TypeAffinity.Blob;
+            return TypeAffinity.Blob;
+        else if (typ == typeof(TimeSpan))
+            return TypeAffinity.Int64;
         else
-          return TypeAffinity.Text;
+            return TypeAffinity.Text;
       }
       if ((tc == TypeCode.Decimal) &&
           ((flags & SQLiteConnectionFlags.GetDecimalAsText) == SQLiteConnectionFlags.GetDecimalAsText))
@@ -1735,7 +1742,7 @@ namespace System.Data.SQLite
             new SQLiteDbTypeMapping("SMALLUINT", DbType.UInt16, true),
             new SQLiteDbTypeMapping("STRING", DbType.String, false),
             new SQLiteDbTypeMapping("TEXT", DbType.String, false),
-            new SQLiteDbTypeMapping("TIME", DbType.DateTime, false),
+            new SQLiteDbTypeMapping("TIME", DbType.Time, false),
             new SQLiteDbTypeMapping("TIMESTAMP", DbType.DateTime, false),
             new SQLiteDbTypeMapping("TINYINT", DbType.Byte, true),
             new SQLiteDbTypeMapping("TINYSINT", DbType.SByte, true),
@@ -2190,7 +2197,7 @@ namespace System.Data.SQLite
     /// Used internally by this provider
     /// </summary>
     None = 11,
-  }
+    }
 
   /// <summary>
   /// These are the event types associated with the

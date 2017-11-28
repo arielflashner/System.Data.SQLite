@@ -80,6 +80,11 @@ PROCESS
     </Type>
     <Type Name="uniqueidentifier" PrimitiveTypeKind="Guid">
     </Type>
+    <Type Name="time" PrimitiveTypeKind="Time">
+      <FacetDescriptions>
+        <Precision DefaultValue="0" Constant="true" />
+      </FacetDescriptions>
+    </Type>
   </Types>
   <Functions>
 

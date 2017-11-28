@@ -317,6 +317,8 @@ namespace System.Data.SQLite.Linq
           }
         case "datetime":
           return TypeUsage.CreateDateTimeTypeUsage(edmPrimitiveType, null);
+        case "time":
+         return TypeUsage.CreateTimeTypeUsage(edmPrimitiveType, null);
         default:
           throw new NotSupportedException(String.Format("SQLite does not support the type '{0}'.", storeTypeName));
       }
@@ -456,6 +458,8 @@ namespace System.Data.SQLite.Linq
           }
         case PrimitiveTypeKind.DateTime: // datetime, smalldatetime
           return TypeUsage.CreateDefaultTypeUsage(StoreTypeNameToStorePrimitiveType["datetime"]);
+        case PrimitiveTypeKind.Time:
+            return TypeUsage.CreateDefaultTypeUsage(StoreTypeNameToStorePrimitiveType["time"]);
         default:
           throw new NotSupportedException(String.Format("There is no store type corresponding to the EDM type '{0}' of primitive type '{1}'.", edmType, primitiveType.PrimitiveTypeKind));
       }

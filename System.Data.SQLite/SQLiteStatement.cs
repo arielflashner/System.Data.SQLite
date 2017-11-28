@@ -458,16 +458,18 @@ namespace System.Data.SQLite
 
       switch (objType)
       {
-        case DbType.Date:
         case DbType.Time:
+            _sql.Bind_Int64(this, _flags, index, ((TimeSpan)obj).Ticks);
+            break;
+        case DbType.Date:
         case DbType.DateTime:
-          //
-          // NOTE: The old method (commented below) does not honor the selected date format
-          //       for the connection.
-          // _sql.Bind_DateTime(this, index, Convert.ToDateTime(obj, cultureInfo));
+            //
+            // NOTE: The old method (commented below) does not honor the selected date format
+            //       for the connection.
+            // _sql.Bind_DateTime(this, index, Convert.ToDateTime(obj, cultureInfo));
             _sql.Bind_DateTime(this, _flags, index, (obj is string) ?
-              _sql.ToDateTime((string)obj) : Convert.ToDateTime(obj, cultureInfo));
-          break;
+                _sql.ToDateTime((string)obj) : Convert.ToDateTime(obj, cultureInfo));
+            break;
         case DbType.Boolean:
           _sql.Bind_Boolean(this, _flags, index, SQLiteConvert.ToBoolean(obj, cultureInfo, true));
           break;
